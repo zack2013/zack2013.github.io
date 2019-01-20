@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax 1-请求纯文本</title>
+</head>
+<body>
+<button id="button1">请求纯文本-onload方法</button>
+<br><br>
+<button id="button2">请求纯文本-onreadystatechange方法</button>
+<br>
+<div id="text"></div>
+
+<script>
+        //创建一个button，设置监听点击动作。
+    document.getElementById('button1').addEventListener("click",loadText1);
+    document.getElementById('button2').addEventListener("click",loadText2);
+
+        //定义一个loadText入口函数
+    function loadText1()
+    {
+        //创建一个xhr对象
+    var xhr = new XMLHttpRequest();
+    console.log(xhr); /*读取xhr可用的方法*/
+
+        //使用xhr的打开方法,要使用xhr的方法必须先打开xhr
+    xhr.open('get','sample.txt',true);
+
+        //监听过程的方法
+    xhr.onprogress = function(){
+        console.log("测试readyState:",xhr.readyState);
+        }
+
+        //xhr的请求纯文本的方法1：onload
+    xhr.onload = function()
+        {
+        console.log("ReadyState",xhr.readyState);
+            console.log(this.responseText);
+                //将文档写在网页里面
+            document.getElementById('text').innerHTML = this.responseText;
+        }
+
+        //发送请求到服务器的方法send
+     xhr.send();
+    }
+
+    function loadText2()
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get','sample.txt',true);
+
+        console.log('readyState',xhr.readyState);
+
+        //xhr的请求纯文本的方法2：onreadystatechange
+    xhr.onreadystatechange = function(){
+
+            if (this.status == 200 && this.readyState == 4){
+                //打印请求的文本
+            console.log(this.responseText);
+            }
+
+                //打印状态码readystate
+            console.log('readystate',xhr.readyState);
+
+
+                //readystate 状态码
+            <!--0：请求初始化，表示目前没有初始化xhr对象-->
+            <!--1：服务期连接已建立-->
+            <!--2：请求已接收-->
+            <!--3：请求处理中-->
+            <!--4：请求已完成，且响应已就绪-->
+
+            //HTTP状态码（常用的）
+          <!--200 - 服务器成功返回网页-->
+          <!--404 - 请求的网页不存在-->
+          <!--503 - 服务器暂时不可用  -->
+
+          //以上两种代码判断网络，HTTP请求码是不是200，readystate代码是不是4，如果两个都符合，说明没问题。
+        }
+
+    xhr.send();/*一定要发送请求到服务器*/
+
+    }
+
+</script>
+
+</body>
+</html>
